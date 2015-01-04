@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel=stylesheet type=text/css href="static/css/bootstrap.css">
+        <style>
+            .anabot {
+                width: 800px;
+                height: 400px;
+            }
+            td {
+                border: 1px solid #CCF;
+            }
+            th {
+                text-align: center;
+                border: 1px solid #CCF;
+                background: #EEF;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="anabot table">
+            <tbody>
+                <tr>
+                    <th colspan=4>Arm</th>
+                </tr>
+                <tr>
+                    <td colspan=4>
+                        <table>
+                            <tr>
+                                <th>Gripper</th>
+                                <th>Syringe</th>
+                            </tr>
+                            <tr>
+                                <td>{{anabot._arm._gripper._contents}}</td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <th>Primed</th>
+                                            <th>Washed</th>
+                                            <th>Blown Off</th>
+                                            <th>Contents</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{anabot._arm._syringe.is_primed}}</td>
+                                            <td>{{anabot._arm._syringe.is_washed}}</td>
+                                            <td>{{anabot._arm._syringe.is_blown_off}}</td>
+                                            <td>{{anabot._arm._syringe.contents}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table">
+                            <tr><th>Vortexer</th></tr>
+                            <tr><td>{{anabot._vortexer._contents}}</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table">
+                            <tr>
+                            {% for name in anabot._racks.iterkeys() %}
+                                <th>{{name}}</th>
+                            {% endfor %}
+                            </tr>
+                            <tr>
+                            {% for rack in anabot._racks.itervalues() %}
+                                <td>
+                                    <table>
+                                    {% for row in rack._containers %}
+                                    <tr>
+                                        {% for container in row %}
+                                            <td>
+                                                {% if container %}
+                                                <table>
+                                                    <tr>
+                                                        <th colspan=2>{{container.barcode}}</th>
+                                                    </tr>
+                                                    {% if container._contents %}
+                                                        {% for name, vol in container._contents.items() %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ vol }}
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </table>
+                                                {% else %}
+                                                {{container}}
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                    </table>
+                                </td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table">
+                            <tr><th>Capper</th></tr>
+                            <tr><td>{{anabot._capper._contents}}</td></tr>
+                        </table>
+                        <table class="table">
+                            <tr><th>Reader</th></tr>
+                            <tr><td>{{anabot._reader._contents}}</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table">
+                            <tr><th>Balance</th></tr>
+                            <tr><td>{{anabot._balance._contents}}</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <button class="btn btn-sm" onclick="anabot.get_samples()">Load Ten Samples</button>
+            <button class="btn btn-sm" onclick="anabot.weigh()" disabled>Weigh Barcode 1</button>
+            <button class="btn btn-sm" onclick="anabot.transfer()" disabled>Transfer</button>
+            <button class="btn btn-sm" onclick="anabot.prime()">Prime</button>
+            <button class="btn btn-sm" onclick="anabot.wash_tip()">Wash Tip</button>
+            <button class="btn btn-sm" onclick="anabot.blow_off()">Blow Off</button>
+            <button class="btn btn-sm" onclick="anabot.vortex()" disabled>Vortex</button>
+            <button class="btn btn-sm" onclick="anabot.cap()" disabled>Cap</button>
+            <button class="btn btn-sm" onclick="anabot.uncap()" disabled>Uncap</button>
+            <button class="btn btn-sm" onclick="anabot.aspirate()" disabled>Aspirate</button>
+            <button>Dispense</button>
+        </div>
+        <div>
+            <button onclick="reset()">Reset</button>
+        </div>
+    </body>
+    <script src="static/js/jquery-1.11.1.min.js"></script>
+    <script>
+        anabot = {
+            get_samples: function() {
+                $.ajax({
+                    method: "POST",
+                    url: 'task',
+                    data: JSON.stringify({name: 'get_samples', inputs: {num_samples: 10}}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(response) {location.reload()},
+                    error: function(data) {
+                        alert(data.responseJSON.message);
+                    },
+                    processData: false
+                });
+            },
+            prime: function() {
+                $.ajax({
+                    method: "POST",
+                    url: 'task',
+                    data: JSON.stringify({name: 'prime', inputs: []}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(response) {location.reload()},
+                    error: function(data) {
+                        alert(data.responseJSON.message);
+                    },
+                    processData: false
+                });
+            },
+            wash_tip: function() {
+                $.ajax({
+                    method: "POST",
+                    url: 'task',
+                    data: JSON.stringify({name: 'wash_tip', inputs: []}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(response) {location.reload()},
+                    error: function(data) {
+                        alert(data.responseJSON.message);
+                    },
+                    processData: false
+                });
+            },
+            blow_off: function() {
+                $.ajax({
+                    method: "POST",
+                    url: 'task',
+                    data: JSON.stringify({name: 'blow_off', inputs: []}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(response) {location.reload()},
+                    error: function(data) {
+                        alert(data.responseJSON.message);
+                    },
+                    processData: true
+                });
+            },
+
+            weigh: function() {
+                $.ajax({
+                    method: "POST",
+                    url: 'task',
+                    data: JSON.stringify({name: 'weigh', inputs: {container: 1}}),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(response) {location.reload()},
+                    error: function(data) {
+                        alert(data.responseJSON.message);
+                    },
+                    processData: false
+                });
+            }
+
+        }
+        function reset() {
+            $.ajax({
+                method: "POST",
+                url: 'reset',
+                success: function(response) {location.reload()},
+                processData: false
+            });
+        }
+    </script>
+</html>
