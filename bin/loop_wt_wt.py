@@ -6,6 +6,8 @@ sample vial is also known as the source vial (vial type = GC vial)
 intermediate vial is also known as the dilution vial  (vial type = 'scint vial')
 final vial (vial type= GC vial)
 """
+from collections import OrderedDict
+
 import triton
 from robot import Robot
 
@@ -67,9 +69,7 @@ def transfer_final(intermediate):
     robot.dispense(final, dispense_vol_in_ml)
     robot.cap(final)
 
-def wt_wt_prep_plan(bot, num_samples):
-    global robot
-    robot = bot
+def wt_wt_prep_plan(num_samples):
     samples = robot.get_samples(num_samples)
     robot.prime()
     triton.map(transfer_tetradecane, samples)
@@ -78,5 +78,22 @@ def wt_wt_prep_plan(bot, num_samples):
 
 
 if __name__ == '__main__':
-    robot = Robot()
-    wt_wt_prep_plan(robot, 10)
+    config = {
+        'racks': OrderedDict([
+            ('sample', {'x': 10, 'y': 3}),
+            ('intermediate', {'x': 20, 'y': 5}),
+            ('final', {'x': 20, 'y': 5}),
+            ('tetradecane', {'x': 1, 'y': 1}),
+            ('hexane', {'x': 1, 'y': 1})
+        ]),
+        'vortexer': {'container_types': ['sample', 'intermediate', 'final']},
+        'capper': {'container_types': ['sample', 'intermediate', 'final']},
+        'arm': {
+            'gripper':{},
+            'syringe': {'max_volume_in_ml': 2}
+        }
+    }
+    global robot
+    robot = Robot(config)
+    NUM_SAMPLES = 10
+    wt_wt_prep_plan(NUM_SAMPLES)
