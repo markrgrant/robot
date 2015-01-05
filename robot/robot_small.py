@@ -1,5 +1,5 @@
 """
-Commands that can be executed by the Anabot.
+Commands that can be executed by the Robot.
 """
 from container import Container
 from util import barcode_iterator

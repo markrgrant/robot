@@ -3,7 +3,7 @@
     <head>
         <link rel=stylesheet type=text/css href="static/css/bootstrap.css">
         <style>
-            .anabot {
+            .robot {
                 width: 800px;
                 height: 400px;
             }
@@ -17,8 +17,8 @@
             }
         </style>
     </head>
-    <body ng-app="AnabotApp" ng-controller="AnabotController">
-        <table class="anabot table">
+    <body ng-app="RobotApp" ng-controller="RobotController">
+        <table class="robot table">
             <tbody>
                 <tr>
                     <th colspan=4>Arm</th>
@@ -31,7 +31,7 @@
                                 <th>Syringe</th>
                             </tr>
                             <tr>
-                                <td>{{anabot.arm.gripper.contents}}</td>
+                                <td>{{robot.arm.gripper.contents}}</td>
                                 <td>
                                     <table>
                                         <tr>
@@ -41,16 +41,16 @@
                                             <th>Contents</th>
                                         </tr>
                                         <tr>
-                                            <td>{{anabot.arm.syringe.is_primed}}</td>
-                                            <td>{{anabot.arm.syringe.is_washed}}</td>
-                                            <td>{{anabot.arm.syringe.is_blown_off}}</td>
+                                            <td>{{robot.arm.syringe.is_primed}}</td>
+                                            <td>{{robot.arm.syringe.is_washed}}</td>
+                                            <td>{{robot.arm.syringe.is_blown_off}}</td>
                                             <td>
                                                 <table>
                                                     <tr>
                                                         <th>type</th>
                                                         <th>vol in ml</th>
                                                     </tr>
-                                                    <tr ng-repeat="(name, vol) in anabot.arm.syringe.contents">
+                                                    <tr ng-repeat="(name, vol) in robot.arm.syringe.contents">
                                                         <td>{{name}}</td>
                                                         <td>{{vol}}</td>
                                                     </tr>
@@ -67,18 +67,18 @@
                     <td>
                         <table class="table">
                             <tr><th>Vortexer</th></tr>
-                            <tr><td>{{anabot.vortexer.contents}}</td></tr>
+                            <tr><td>{{robot.vortexer.contents}}</td></tr>
                         </table>
                     </td>
                     <td>
                         <table class="table">
                             <tr>
-                                <th ng-repeat="rack in anabot.racks">
+                                <th ng-repeat="rack in robot.racks">
                                     {{rack.container_type}}
                                 </th>
                             </tr>
                             <tr>
-                                <td ng-repeat="rack in anabot.racks">
+                                <td ng-repeat="rack in robot.racks">
                                     <table>
                                         <tr ng-repeat="row in rack.containers">
                                             <td ng-repeat="container in row">
@@ -106,17 +106,17 @@
                     <td>
                         <table class="table">
                             <tr><th>Capper</th></tr>
-                            <tr><td>{{anabot._capper._contents}}</td></tr>
+                            <tr><td>{{robot._capper._contents}}</td></tr>
                         </table>
                         <table class="table">
                             <tr><th>Reader</th></tr>
-                            <tr><td>{{anabot._reader._contents}}</td></tr>
+                            <tr><td>{{robot._reader._contents}}</td></tr>
                         </table>
                     </td>
                     <td>
                         <table class="table">
                             <tr><th>Balance</th></tr>
-                            <tr><td>{{anabot._balance._contents}}</td></tr>
+                            <tr><td>{{robot._balance._contents}}</td></tr>
                         </table>
                     </td>
                 </tr>
@@ -143,21 +143,21 @@
     <script src="static/js/angular-resource.js"></script>
     <script>
 
-    var AnabotApp = angular.module(
-        'AnabotApp',
+    var RobotApp = angular.module(
+        'RobotApp',
         ['ngResource', 'ngRoute']
     );
 
-    AnabotApp.config(function ($routeProvider) {
+    RobotApp.config(function ($routeProvider) {
         $routeProvider.when('/home',
         {
-            controller: 'AnabotController',
+            controller: 'RobotController',
             templateUrl: '/static/html/index.html'
         }).otherwise({redirectTo: '/home'})
     });
 
-    AnabotApp.controller(
-    'AnabotController', ['$scope', 'Anabot', function($scope, Anabot) {
+    RobotApp.controller(
+    'RobotController', ['$scope', 'Robot', function($scope, Robot) {
 
             task = {
                 prime: {
@@ -174,25 +174,25 @@
                 }
             };
 
-            Anabot.get(function(response) {
-                $scope.anabot = response;
+            Robot.get(function(response) {
+                $scope.robot = response;
             });
 
             $scope.reset = function() {
-                Anabot.reset(function(response) {
-                    $scope.anabot = response;
+                Robot.reset(function(response) {
+                    $scope.robot = response;
                 });
             };
 
             $scope.run_wt_wt = function() {
-                Anabot.run_wt_wt(function(response) {
-                    $scope.anabot = response;
+                Robot.run_wt_wt(function(response) {
+                    $scope.robot = response;
                 });
             };
 
             $scope.execute_task = function(task) {
-                Anabot.reset(function(response) {
-                        $scope.anabot = response;
+                Robot.reset(function(response) {
+                        $scope.robot = response;
                     },
                     function(response) {
                         alert(response.data.message);
@@ -201,10 +201,10 @@
             };
 
             $scope.prime = function() {
-                Anabot.task(
+                Robot.task(
                     task.prime,
                     function(response) {
-                        $scope.anabot = response;
+                        $scope.robot = response;
                     },
                     function(response) {
                         alert(response.data.message);
@@ -213,10 +213,10 @@
             };
 
             $scope.wash_tip = function() {
-                Anabot.task(
+                Robot.task(
                     task.wash_tip,
                     function(response) {
-                        $scope.anabot = response;
+                        $scope.robot = response;
                     },
                     function(response) {
                         alert(response.data.message);
@@ -225,10 +225,10 @@
             };
 
             $scope.blow_off = function() {
-                Anabot.task(
+                Robot.task(
                     task.blow_off,
                     function(response) {
-                        $scope.anabot = response;
+                        $scope.robot = response;
                     },
                     function(response) {
                         alert(response.data.message);
@@ -239,9 +239,9 @@
         }]
     );
 
-    AnabotApp.factory('Anabot', function($resource) {
+    RobotApp.factory('Robot', function($resource) {
         return $resource(
-        '/anabot/:customAction/',
+        '/robot/:customAction/',
         {customAction: '@customAction'},
         {
             reset: {
@@ -270,7 +270,7 @@
     });
 
 /*
-        anabot = {
+        robot = {
             get_samples: function() {
                 $.ajax({
                     method: "POST",

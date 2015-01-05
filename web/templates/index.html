@@ -3,7 +3,7 @@
     <head>
         <link rel=stylesheet type=text/css href="static/css/bootstrap.css">
         <style>
-            .anabot {
+            .robot {
                 width: 800px;
                 height: 400px;
             }
@@ -18,7 +18,7 @@
         </style>
     </head>
     <body>
-        <table class="anabot table">
+        <table class="robot table">
             <tbody>
                 <tr>
                     <th colspan=4>Arm</th>
@@ -31,7 +31,7 @@
                                 <th>Syringe</th>
                             </tr>
                             <tr>
-                                <td>{{anabot._arm._gripper._contents}}</td>
+                                <td>{{robot._arm._gripper._contents}}</td>
                                 <td>
                                     <table>
                                         <tr>
@@ -41,10 +41,10 @@
                                             <th>Contents</th>
                                         </tr>
                                         <tr>
-                                            <td>{{anabot._arm._syringe.is_primed}}</td>
-                                            <td>{{anabot._arm._syringe.is_washed}}</td>
-                                            <td>{{anabot._arm._syringe.is_blown_off}}</td>
-                                            <td>{{anabot._arm._syringe.contents}}</td>
+                                            <td>{{robot._arm._syringe.is_primed}}</td>
+                                            <td>{{robot._arm._syringe.is_washed}}</td>
+                                            <td>{{robot._arm._syringe.is_blown_off}}</td>
+                                            <td>{{robot._arm._syringe.contents}}</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -56,18 +56,18 @@
                     <td>
                         <table class="table">
                             <tr><th>Vortexer</th></tr>
-                            <tr><td>{{anabot._vortexer._contents}}</td></tr>
+                            <tr><td>{{robot._vortexer._contents}}</td></tr>
                         </table>
                     </td>
                     <td>
                         <table class="table">
                             <tr>
-                            {% for name in anabot._racks.iterkeys() %}
+                            {% for name in robot._racks.iterkeys() %}
                                 <th>{{name}}</th>
                             {% endfor %}
                             </tr>
                             <tr>
-                            {% for rack in anabot._racks.itervalues() %}
+                            {% for rack in robot._racks.itervalues() %}
                                 <td>
                                     <table>
                                     {% for row in rack._containers %}
@@ -108,33 +108,33 @@
                     <td>
                         <table class="table">
                             <tr><th>Capper</th></tr>
-                            <tr><td>{{anabot._capper._contents}}</td></tr>
+                            <tr><td>{{robot._capper._contents}}</td></tr>
                         </table>
                         <table class="table">
                             <tr><th>Reader</th></tr>
-                            <tr><td>{{anabot._reader._contents}}</td></tr>
+                            <tr><td>{{robot._reader._contents}}</td></tr>
                         </table>
                     </td>
                     <td>
                         <table class="table">
                             <tr><th>Balance</th></tr>
-                            <tr><td>{{anabot._balance._contents}}</td></tr>
+                            <tr><td>{{robot._balance._contents}}</td></tr>
                         </table>
                     </td>
                 </tr>
             </tbody>
         </table>
         <div>
-            <button class="btn btn-sm" onclick="anabot.get_samples()">Load Ten Samples</button>
-            <button class="btn btn-sm" onclick="anabot.weigh()" disabled>Weigh Barcode 1</button>
-            <button class="btn btn-sm" onclick="anabot.transfer()" disabled>Transfer</button>
-            <button class="btn btn-sm" onclick="anabot.prime()">Prime</button>
-            <button class="btn btn-sm" onclick="anabot.wash_tip()">Wash Tip</button>
-            <button class="btn btn-sm" onclick="anabot.blow_off()">Blow Off</button>
-            <button class="btn btn-sm" onclick="anabot.vortex()" disabled>Vortex</button>
-            <button class="btn btn-sm" onclick="anabot.cap()" disabled>Cap</button>
-            <button class="btn btn-sm" onclick="anabot.uncap()" disabled>Uncap</button>
-            <button class="btn btn-sm" onclick="anabot.aspirate()" disabled>Aspirate</button>
+            <button class="btn btn-sm" onclick="robot.get_samples()">Load Ten Samples</button>
+            <button class="btn btn-sm" onclick="robot.weigh()" disabled>Weigh Barcode 1</button>
+            <button class="btn btn-sm" onclick="robot.transfer()" disabled>Transfer</button>
+            <button class="btn btn-sm" onclick="robot.prime()">Prime</button>
+            <button class="btn btn-sm" onclick="robot.wash_tip()">Wash Tip</button>
+            <button class="btn btn-sm" onclick="robot.blow_off()">Blow Off</button>
+            <button class="btn btn-sm" onclick="robot.vortex()" disabled>Vortex</button>
+            <button class="btn btn-sm" onclick="robot.cap()" disabled>Cap</button>
+            <button class="btn btn-sm" onclick="robot.uncap()" disabled>Uncap</button>
+            <button class="btn btn-sm" onclick="robot.aspirate()" disabled>Aspirate</button>
             <button>Dispense</button>
         </div>
         <div>
@@ -143,7 +143,7 @@
     </body>
     <script src="static/js/jquery-1.11.1.min.js"></script>
     <script>
-        anabot = {
+        robot = {
             get_samples: function() {
                 $.ajax({
                     method: "POST",

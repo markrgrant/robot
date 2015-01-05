@@ -1,1 +1,1 @@
-from anabot import Anabot
+from robot import Robot

@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from anabot import Anabot
+from robot import Robot
 import json
 import loop_wt_wt
 
@@ -7,7 +7,7 @@ import loop_wt_wt
 # configuraiton
 DEBUG = True
 
-anabot = Anabot()
+robot = Robot()
 app = Flask(__name__)
 #SERVER_NAME = '127.0.0.1:9010'
 app.config.from_object(__name__)
@@ -17,36 +17,36 @@ def index():
     return app.send_static_file('html/index.html')
 
 
-@app.route("/anabot/run_wt_wt", methods=['POST'])
+@app.route("/robot/run_wt_wt", methods=['POST'])
 def run_wt_wt():
-    global anabot
+    global robot
     try:
-        loop_wt_wt.wt_wt_prep_plan(anabot, 10)
+        loop_wt_wt.wt_wt_prep_plan(robot, 10)
     except Exception as e:
         response = jsonify({
             'status': 400,
             'message': e.message
         })
         return response
-    return jsonify(anabot.to_dict())
+    return jsonify(robot.to_dict())
 
-@app.route("/anabot")
+@app.route("/robot")
 def read():
     """
-    display the state of the anabot
+    display the state of the robot
     """
-    global anabot
-    return jsonify(anabot.to_dict())
+    global robot
+    return jsonify(robot.to_dict())
 
-@app.route("/anabot/task", methods=['POST'])
+@app.route("/robot/task", methods=['POST'])
 def task():
     """
-    execute an anabot task
+    execute an robot task
     """
-    global anabot
+    global robot
     data = request.data
     task = json.loads(data)
-    method = getattr(anabot, task['name'])
+    method = getattr(robot, task['name'])
     inputs = task['inputs'] if task['inputs'] else dict()
     try:
         task['outputs'] = method(**inputs)
@@ -57,13 +57,13 @@ def task():
         })
         response.status_code = 400
         return response
-    return jsonify(anabot.to_dict())
+    return jsonify(robot.to_dict())
 
-@app.route("/anabot/reset", methods=['POST'])
+@app.route("/robot/reset", methods=['POST'])
 def reset():
-    global anabot
-    anabot = Anabot()
-    return jsonify(anabot.to_dict())
+    global robot
+    robot = Robot()
+    return jsonify(robot.to_dict())
 
 if __name__ == "__main__":
     app.run(port=9027)

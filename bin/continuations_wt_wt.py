@@ -1,67 +1,67 @@
 """
-A version of an anabot wt/wt protocol that uses continuations
+A version of an robot wt/wt protocol that uses continuations
 rather than loops for determining the sequence of commands that
 are executed.
 """
-from anabot import Anabot
+from robot import Robot
 
-anabot = Anabot()
+robot = Robot()
 
 
 def replicate_plan(sample, replicate):
-    hexane = anabot.get_hexane()
+    hexane = robot.get_hexane()
     aspirate_vol_in_ml = 0.11
-    anabot.weigh(replicate)
-    anabot.uncap(replicate)
-    anabot.dispense(replicate)
-    anabot.cap(replicate)
-    anabot.weigh(replicate)
+    robot.weigh(replicate)
+    robot.uncap(replicate)
+    robot.dispense(replicate)
+    robot.cap(replicate)
+    robot.weigh(replicate)
     yield
-    anabot.uncap(replicate)
-    anabot.dispense(replicate)
-    anabot.cap(replicate)
-    anabot.weigh(replicate)
+    robot.uncap(replicate)
+    robot.dispense(replicate)
+    robot.cap(replicate)
+    robot.weigh(replicate)
     yield
-    #anabot.add_hexane(replicate)
-    anabot.aspirate(hexane)
-    anabot.uncap(replicate)
-    anabot.dispense(replicate)
-    anabot.cap(replicate)
+    #robot.add_hexane(replicate)
+    robot.aspirate(hexane)
+    robot.uncap(replicate)
+    robot.dispense(replicate)
+    robot.cap(replicate)
     yield
-    anabot.vortex(replicate)
-    anabot.uncap(replicate)
-    anabot.aspirate(replicate)
-    anabot.cap(replicate)
+    robot.vortex(replicate)
+    robot.uncap(replicate)
+    robot.aspirate(replicate)
+    robot.cap(replicate)
     final = replicate.destinations[0]
-    anabot.uncap(final)
-    anabot.dispense(final)
-    anabot.cap(final)
+    robot.uncap(final)
+    robot.dispense(final)
+    robot.cap(final)
     yield
 
 
 def sample_plan(sample):
     intermediates = sample.destinations
-    tetradecane = anabot.get_tetradecane()
+    tetradecane = robot.get_tetradecane()
     replicate_plans = [replicate_plan(sample, di) for di in intermediates]
-    anabot.aspirate(tetradecane)
+    robot.aspirate(tetradecane)
     [next(wf) for wf in replicate_plans]
     yield
-    anabot.aspirate(sample)
+    robot.aspirate(sample)
     [next(wf) for wf in replicate_plans]
-    anabot.wash_tip()
+    robot.wash_tip()
     yield
     [next(wf) for wf in replicate_plans]
-    anabot.blow_off()
+    robot.blow_off()
     [next(wf) for wf in replicate_plans]
     yield
 
 
 def wt_wt_prep_plan(num_samples):
-    anabot.prime()
-    samples = anabot.get_samples(num_samples)
+    robot.prime()
+    samples = robot.get_samples(num_samples)
     sample_plans = [sample_plan(sa) for sa in samples]
     [next(wf) for wf in sample_plans]
-    anabot.wash_tip()
+    robot.wash_tip()
     [next(wf) for wf in sample_plans]
     [next(wf) for wf in sample_plans]
 

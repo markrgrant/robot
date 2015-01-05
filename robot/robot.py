@@ -10,9 +10,9 @@ from vial import Vial
 from collections import OrderedDict
 
 
-class Anabot(object):
+class Robot(object):
     """
-    The Anabot class simulates a real-world robot. The robot itself
+    The Robot class simulates a real-world robot. The robot itself
     is made up of a set of components:
         - Arm
             - Gripper(s)
@@ -22,7 +22,7 @@ class Anabot(object):
         - Rack(s).  Each rack holds a particular type of
           container and has m-by-n positions where each position can hold
           1 container of the given type.  The types of containers in use on
-          the Anabot are:
+          the Robot are:
           - 20 ml scint containers
           - 2 ml GC containers
           - Tetradecane (internal standard)
@@ -30,12 +30,12 @@ class Anabot(object):
         - Reader
         - Vortexer
 
-    The Anabot class wraps these components and provides a simplified
+    The Robot class wraps these components and provides a simplified
     interface for executing tasks on the robot.
     """
     def __init__(self):
         """
-        Create the components and the rack dimensions of the Anabot.
+        Create the components and the rack dimensions of the Robot.
         The config argument contains the types and dimensions of the racks.
 
         Args:
@@ -55,7 +55,7 @@ class Anabot(object):
             }
 
         Returns:
-            (Anabot): a new Anabot instance
+            (Robot): a new Robot instance
         """
         config = {
             'racks': OrderedDict([
@@ -276,11 +276,11 @@ class Anabot(object):
 
     def to_str(self):
         """
-        Provides a string representation of the state of the Anabot at the time
+        Provides a string representation of the state of the Robot at the time
         that the method is called.
 
         Returns:
-            (string): a string representation of the state of the Anabot
+            (string): a string representation of the state of the Robot
         """
         return self._to_str('')
 
@@ -290,7 +290,7 @@ class Anabot(object):
             rack_info += rack.to_str(indent + '  ')
         rack_info = indent + "\n\n{0}".format(rack_info)
 
-        return "Anabot:\n\n{0}\n\n{1}\n\n{2}\n\n{3}".format(
+        return "Robot:\n\n{0}\n\n{1}\n\n{2}\n\n{3}".format(
             self._capper.to_str(indent + '  '),
             rack_info,
             self._balance.to_str(indent + '  '),
