@@ -1,5 +1,5 @@
 """
-A version of an robot wt/wt protocol that uses continuations
+A version of a robot protocol that uses continuations
 rather than loops for determining the sequence of commands that
 are executed.
 """

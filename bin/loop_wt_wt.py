@@ -1,10 +1,5 @@
 """
 A sample transfer protocol that uses nested loops for execution
-
-Notes:
-sample vial is also known as the source vial (vial type = GC vial)
-intermediate vial is also known as the dilution vial  (vial type = 'scint vial')
-final vial (vial type= GC vial)
 """
 from collections import OrderedDict
 
