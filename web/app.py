@@ -4,12 +4,11 @@ import json
 import loop_wt_wt
 
 
-# configuraiton
+# configuration
 DEBUG = True
 
 robot = Robot()
 app = Flask(__name__)
-#SERVER_NAME = '127.0.0.1:9010'
 app.config.from_object(__name__)
 
 @app.route('/')
