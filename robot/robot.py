@@ -1,3 +1,8 @@
+"""
+A liquid transfer robot simulator
+"""
+from collections import OrderedDict
+
 from arm import Arm
 from rack import Rack
 from capper import Capper
@@ -7,7 +12,6 @@ from vortexer import Vortexer
 from position import Position
 from bottle import Bottle
 from vial import Vial
-from collections import OrderedDict
 
 
 class Robot(object):
@@ -15,25 +19,27 @@ class Robot(object):
     The Robot class simulates a real-world robot. The robot itself
     is made up of a set of components:
         - Arm
-            - Gripper(s)
-            - Syringe
+          - Gripper(s)
+          - Syringe
         - Capper
         - Balance
-        - Rack(s).  Each rack holds a particular type of
-          container and has m-by-n positions where each position can hold
-          1 container of the given type.  The types of containers in use on
-          the Robot are:
-          - 20 ml scint containers
-          - 2 ml GC containers
-          - Tetradecane (internal standard)
-          - Hexane
         - Reader
         - Vortexer
+        - Rack(s).  Each rack holds a particular type of
+          container and has m-by-n positions where each position can hold
+          1 container of the given type.
+
+          An example of the types of containers that might be in use on
+          a Robot are:
+          - 20 ml scint containers
+          - 2 ml GC containers
+          - bottle of Tetradecane (internal standard)
+          - bottle of Hexane
 
     The Robot class wraps these components and provides a simplified
     interface for executing tasks on the robot.
     """
-    def __init__(self):
+    def __init__(self, config):
         """
         Create the components and the rack dimensions of the Robot.
         The config argument contains the types and dimensions of the racks.
