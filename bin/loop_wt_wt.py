@@ -1,6 +1,5 @@
 """
-A version of the wt/wt protocol that uses a sequence of nested loops for executing a
-wt/wt protocol.
+A sample transfer protocol that uses nested loops for execution
 
 Notes:
 sample vial is also known as the source vial (vial type = GC vial)
@@ -8,6 +7,7 @@ intermediate vial is also known as the dilution vial  (vial type = 'scint vial')
 final vial (vial type= GC vial)
 """
 import triton
+from robot import Robot
 
 robot = None
 
@@ -78,4 +78,5 @@ def wt_wt_prep_plan(bot, num_samples):
 
 
 if __name__ == '__main__':
-    wt_wt_prep_plan(10)
+    robot = Robot()
+    wt_wt_prep_plan(robot, 10)
