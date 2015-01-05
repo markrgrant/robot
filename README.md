@@ -1,22 +1,41 @@
-## summary
+## Summary
 
-A simulation of a robot that performs liquid transfers
+A liquid transfer robot simulator
 
 ## usage
 
-### create a robot instance
-
+### define a robot instance with a configuration
+```
+config = {
+    'racks': OrderedDict([
+        ('sample', {'x': 10, 'y': 3}),
+        ('intermediate', {'x': 20, 'y': 5}),
+        ('final', {'x': 20, 'y': 5}),
+        ('tetradecane', {'x': 1, 'y': 1}),
+        ('hexane', {'x': 1, 'y': 1})
+    ]),
+    'vortexer': {'container_types': ['sample', 'intermediate', 'final']},
+    'capper': {'container_types': ['sample', 'intermediate', 'final']},
+    'arm': {
+        'gripper':{},
+        'syringe': {'max_volume_in_ml': 2}
+    }
+}
 robot = Robot(config)
+```
 
-### transfer and weigh reagents
+### define samples and perform liquid transfers
 
-robot.transfer(source, dest, vol_in_ml)
-robot.transfer_and_weigh(source, dest, vol_in_ml)
+    samples = robot.load_samples(num_samples)
 
+    hexane = robot.get('hexane', 0, 0)
+    robot.uncap(samples[0])
+    robot.aspirate(hexane, 0.5)
+    robot.dispense(samples[0], 0.45)
+    robot.cap(samples[0])
 
+### other methods
 
-
-## methods
 - transfer(source, dest, vol_in_ml)
 - weigh(container)
 - prime()
