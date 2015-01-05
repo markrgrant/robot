@@ -89,28 +89,18 @@ class Robot(object):
         for k, v in config['racks'].items():
             self._racks[k] = Rack(k, v['x'], v['y'])
 
-        self._create_hexane()
-        self._create_tetradecane()
+        self.create_container('hexane', 0, 0, 500.)
+        self.create_container('tetradecane', 0, 0, 500.)
 
-    def _create_hexane(self):
-        container = Bottle('hexane')
-        container.add_contents(hexane=500.0)
-        container.position = Position(0,0)
+    def create_container(self, rack_name, x_pos, y_pos, volume_in_ml):
+        container = Bottle(rack_name)
+        container.add_contents(rack_name=volume_in_ml)
+        container.position = Position(x_pos, y_pos)
         self.add_container(container)
         return container
 
-    def get_hexane(self):
-        return self._racks['hexane']._containers[0][0]
-
-    def get_tetradecane(self):
-        return self._racks['tetradecane']._containers[0][0]
-
-    def _create_tetradecane(self):
-        container = Bottle('tetradecane')
-        container.position = Position(0,0)
-        container.add_contents(tetradecane=500.0)
-        self.add_container(container)
-        return container
+    def get_container(self, rack_name, x_pos, y_pos):
+        return self._racks[rack_name]._containers[x_pos][y_pos]
 
     def get_samples(self, num_samples):
         def create_sample(index):

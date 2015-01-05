@@ -10,7 +10,7 @@ robot = None
 
 def transfer_tetradecane(sample):
     aspirate_tet_vol_in_ml = 0.21
-    tetradecane = robot.get_tetradecane()
+    tetradecane = robot.get_container('tetradecane', 0, 0)
     robot.aspirate(tetradecane, aspirate_tet_vol_in_ml)
     destinations = triton.getattr(sample, 'destinations')
     triton.map(dispense_tetradecane, destinations)
@@ -45,7 +45,7 @@ def dilute_sample(sample):
 def transfer_hexane(intermediate):
     aspirate_vol_in_ml = 0.11
     dispense_vol_in_ml = 0.10
-    hexane = robot.get_hexane()
+    hexane = robot.get_container('hexane', 0, 0)
     robot.aspirate(hexane, aspirate_vol_in_ml)
     robot.uncap(intermediate)
     robot.dispense(intermediate, dispense_vol_in_ml)

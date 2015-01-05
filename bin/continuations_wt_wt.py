@@ -11,7 +11,7 @@ from robot import Robot
 robot = None
 
 def replicate_plan(sample, replicate):
-    hexane = robot.get_hexane()
+    hexane = robot.get_container('hexane', 0, 0)
     aspirate_vol_in_ml = 0.10
     dispense_vol_in_ml = 0.10
     robot.weigh(replicate)
@@ -25,7 +25,6 @@ def replicate_plan(sample, replicate):
     robot.cap(replicate)
     robot.weigh(replicate)
     yield
-    #robot.add_hexane(replicate)
     robot.aspirate(hexane, aspirate_vol_in_ml)
     robot.uncap(replicate)
     robot.dispense(replicate, dispense_vol_in_ml)
@@ -45,7 +44,7 @@ def replicate_plan(sample, replicate):
 def sample_plan(sample):
     aspirate_vol_in_ml = 0.21
     intermediates = sample.destinations
-    tetradecane = robot.get_tetradecane()
+    tetradecane = robot.get_container('tetradecane', 0, 0)
     replicate_plans = [replicate_plan(sample, di) for di in intermediates]
     robot.aspirate(tetradecane, aspirate_vol_in_ml)
     [next(wf) for wf in replicate_plans]
