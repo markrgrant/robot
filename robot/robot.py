@@ -1,8 +1,6 @@
 """
 A liquid transfer robot simulator
 """
-from collections import OrderedDict
-
 from arm import Arm
 from rack import Rack
 from capper import Capper
@@ -45,17 +43,18 @@ class Robot(object):
         The config argument contains the types and dimensions of the racks.
 
         Args:
-            config (dict): A dict of the form
-
-            {
-                'racks': {
-                    'container_type_a': {x: 10, y: 20},
-                    'container_type_b': {x: 10, y: 20}
-                },
-                'vortexer': {'container_types': ['gc_vial']},
-                'capper': {'container_types': ['gc_vial']},
-                'arm: {
-                    'gripper': {},
+            config = {
+                'racks': OrderedDict([
+                    ('sample', {'x': 10, 'y': 3}),
+                    ('intermediate', {'x': 20, 'y': 5}),
+                    ('final', {'x': 20, 'y': 5}),
+                    ('tetradecane', {'x': 1, 'y': 1}),
+                    ('hexane', {'x': 1, 'y': 1})
+                ]),
+                'vortexer': {'container_types': ['sample', 'intermediate', 'final']},
+                'capper': {'container_types': ['sample', 'intermediate', 'final']},
+                'arm': {
+                    'gripper':{},
                     'syringe': {'max_volume_in_ml': 2}
                 }
             }
@@ -63,22 +62,6 @@ class Robot(object):
         Returns:
             (Robot): a new Robot instance
         """
-        config = {
-            'racks': OrderedDict([
-                ('sample', {'x': 10, 'y': 3}),
-                ('intermediate', {'x': 20, 'y': 5}),
-                ('final', {'x': 20, 'y': 5}),
-                ('tetradecane', {'x': 1, 'y': 1}),
-                ('hexane', {'x': 1, 'y': 1})
-            ]),
-            'vortexer': {'container_types': ['sample', 'intermediate', 'final']},
-            'capper': {'container_types': ['sample', 'intermediate', 'final']},
-            'arm': {
-                'gripper':{},
-                'syringe': {'max_volume_in_ml': 2}
-            }
-        }
-
         self._capper   = Capper(**config['capper'])
         self._balance  = Balance()
         self._arm      = Arm(config['arm'])
