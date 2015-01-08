@@ -11,6 +11,7 @@ from robot import Robot
 robot = None
 
 def replicate_plan(sample, replicate):
+
     hexane = robot.get_container('hexane', 0, 0)
     aspirate_vol_in_ml = 0.10
     dispense_vol_in_ml = 0.10
@@ -62,6 +63,8 @@ def sample_plan(sample):
 def wt_wt_prep_plan(num_samples):
     robot.prime()
     samples = robot.get_samples(num_samples)
+    robot.create_container('hexane', 0, 0, 500.)
+    robot.create_container('tetradecane', 0, 0, 500.)
     sample_plans = [sample_plan(sa) for sa in samples]
     [next(wf) for wf in sample_plans]
     robot.wash_tip()
