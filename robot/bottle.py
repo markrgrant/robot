@@ -1,8 +1,9 @@
 from material_container import MaterialContainer
 from barcoded import Barcoded
+from capped import Capped
 
 
-class Bottle(Barcoded, MaterialContainer):
+class Bottle(Barcoded, Capped, MaterialContainer):
     """
     A bottle is a type of material container designed to hold a large
     reservoir of a bulk reagent such as water or a diluent.

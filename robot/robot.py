@@ -72,18 +72,31 @@ class Robot(object):
         for k, v in config['racks'].items():
             self._racks[k] = Rack(k, v['x'], v['y'])
 
-        self.create_container('hexane', 0, 0, 500.)
-        self.create_container('tetradecane', 0, 0, 500.)
-
     def create_container(self, rack_name, x_pos, y_pos, volume_in_ml):
         container = Bottle(rack_name)
-        container.add_contents(rack_name=volume_in_ml)
+        kwargs = dict()
+        kwargs[rack_name] = volume_in_ml
+        container.add_contents(**kwargs)
         container.position = Position(x_pos, y_pos)
         self.add_container(container)
         return container
 
     def get_container(self, rack_name, x_pos, y_pos):
         return self._racks[rack_name]._containers[x_pos][y_pos]
+
+    def load_containers(self, rack_name, num, vol_in_ml, container_type):
+        def create_container(rack_name, index):
+            if container_type == 'vial':
+                container = Vial(rack_name)
+            elif container_type == 'bottle':
+                container = Bottle(rack_name)
+            container.position=Position(index, 0)
+            kwargs = dict()
+            kwargs[rack_name] = vol_in_ml # a dummy volume
+            container.add_contents(**kwargs)
+            self.add_container(container)
+            return container
+        return [create_container(rack_name, i) for i in range(0, num)]
 
     def get_samples(self, num_samples):
         def create_sample(index):

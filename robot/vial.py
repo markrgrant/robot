@@ -10,7 +10,7 @@ class Vial(Barcoded, Capped, MaterialContainer):
     1. Has a cap
     3. Is barcoded
     """
-    MAX_VOLUME_IN_ML = 3
+    MAX_VOLUME_IN_ML = 20
 
     def __init__(self, container_type):
         self._mixed = False
