@@ -45,8 +45,8 @@ def replicate_plan(sample, replicate):
 def sample_plan(sample):
     aspirate_vol_in_ml = 0.21
     intermediates = sample.destinations
-    tetradecane = robot.get_container('tetradecane', 0, 0)
     replicate_plans = [replicate_plan(sample, di) for di in intermediates]
+    tetradecane = robot.get_container('tetradecane', 0, 0)
     robot.aspirate(tetradecane, aspirate_vol_in_ml)
     [next(wf) for wf in replicate_plans]
     yield
