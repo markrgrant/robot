@@ -12,6 +12,8 @@ def transfer_tetradecane(sample):
     aspirate_tet_vol_in_ml = 0.251  # .250 but aspirate a little more
     tetradecane = robot.get_container('tetradecane', 0, 0)
     robot.aspirate(tetradecane, aspirate_tet_vol_in_ml)
+    destinations = getattr(sample, 'destinations')
+    map(dispense_tetradecane, destinations)
 
 def dispense_tetradecane(intermediate):
     dispense_vol_in_ml = 0.125
@@ -24,6 +26,8 @@ def dispense_tetradecane(intermediate):
 def transfer_sample(sample):
     aspirate_vol_in_ml = 0.251 # .250 but aspirate a little more
     robot.aspirate(sample, aspirate_vol_in_ml)
+    destinations = getattr(sample, 'destinations')
+    map(dispense_sample, destinations)
     robot.wash_tip()  # wash after dispenses performed
 
 def dispense_sample(intermediate):
@@ -32,6 +36,13 @@ def dispense_sample(intermediate):
     robot.dispense(intermediate, dispense_vol_in_ml)
     robot.cap(intermediate)
     robot.weigh(intermediate)
+
+def dilute_sample(sample):
+    intermediates = getattr(sample, 'destinations')
+    map(transfer_hexane_intermediate, intermediates)
+    map(transfer_sample_final, intermediates)
+    map(transfer_hexane_final, intermediates)
+
 
 def transfer_hexane_intermediate(intermediate):
     aspirate_vol_in_ml = 16.6 # extra
@@ -46,7 +57,7 @@ def transfer_hexane_intermediate(intermediate):
 def transfer_sample_final(intermediate):
     aspirate_vol_in_ml = 0.06
     dispense_vol_in_ml = 0.05
-    final = triton.getitem(intermediate, 'destinations', 0)
+    final = getattr(intermediate, 'destinations')[0]
     robot.vortex(intermediate)
     robot.uncap(intermediate)
     robot.aspirate(intermediate, aspirate_vol_in_ml)
@@ -58,7 +69,7 @@ def transfer_sample_final(intermediate):
 def transfer_hexane_final(intermediate):
     aspirate_vol_in_ml = 1.46 # extra
     dispense_vol_in_ml = 1.45
-    final = triton.getitem(intermediate, 'destinations', 0)
+    final = getattr(intermediate, 'destinations')[0]
     hexane = robot.get_container('hexane', 0, 0)
     robot.aspirate(hexane, aspirate_vol_in_ml)
     robot.uncap(final)
@@ -74,6 +85,9 @@ def wt_wt_prep_plan(bot, num_samples):
     robot.create_container('hexane', 0, 0, 500.)
     robot.create_container('tetradecane', 0, 0, 500.)
     robot.prime()
+    map(transfer_tetradecane, samples)
+    map(transfer_sample, samples)
+    map(dilute_sample, samples)
 
 
 if __name__ == '__main__':
