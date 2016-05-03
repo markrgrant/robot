@@ -4,8 +4,6 @@ A sample transfer protocol that uses nested loops for execution
 from collections import OrderedDict
 
 from robot import Robot
-import triton
-import pegasus
 
 
 robot = None
@@ -14,24 +12,18 @@ def transfer_tetradecane(sample):
     aspirate_tet_vol_in_ml = 0.251  # .250 but aspirate a little more
     tetradecane = robot.get_container('tetradecane', 0, 0)
     robot.aspirate(tetradecane, aspirate_tet_vol_in_ml)
-    destinations = triton.getattr(sample, 'destinations')
-    triton.map(dispense_tetradecane, destinations)
 
 def dispense_tetradecane(intermediate):
     dispense_vol_in_ml = 0.125
     robot.weigh(intermediate)
-    pegasus.record_weight(intermediate)
     robot.uncap(intermediate)
     robot.dispense(intermediate, dispense_vol_in_ml)
     robot.cap(intermediate)
     robot.weigh(intermediate)
-    pegasus.record_weight(intermediate)
 
 def transfer_sample(sample):
     aspirate_vol_in_ml = 0.251 # .250 but aspirate a little more
     robot.aspirate(sample, aspirate_vol_in_ml)
-    destinations = triton.getattr(sample, 'destinations')
-    triton.map(dispense_sample, destinations)
     robot.wash_tip()  # wash after dispenses performed
 
 def dispense_sample(intermediate):
@@ -40,13 +32,6 @@ def dispense_sample(intermediate):
     robot.dispense(intermediate, dispense_vol_in_ml)
     robot.cap(intermediate)
     robot.weigh(intermediate)
-    pegasus.record_weight(intermediate)
-
-def dilute_sample(sample):
-    intermediates = triton.getattr(sample, 'destinations')
-    triton.map(transfer_hexane_intermediate, intermediates)
-    triton.map(transfer_sample_final, intermediates)
-    triton.map(transfer_hexane_final, intermediates)
 
 def transfer_hexane_intermediate(intermediate):
     aspirate_vol_in_ml = 16.6 # extra
@@ -55,7 +40,6 @@ def transfer_hexane_intermediate(intermediate):
     robot.aspirate(hexane, aspirate_vol_in_ml)
     robot.uncap(intermediate)
     robot.dispense(intermediate, dispense_vol_in_ml)
-    pegasus.record_transfer(hexane, intermediate, dispense_vol_in_ml)
     robot.cap(intermediate)
     robot.blow_off()
 
@@ -69,7 +53,6 @@ def transfer_sample_final(intermediate):
     robot.cap(intermediate)
     robot.uncap(final)
     robot.dispense(final, dispense_vol_in_ml)
-    pegasus.record_transfer(intermediate, final, dispense_vol_in_ml)
     robot.cap(final)
 
 def transfer_hexane_final(intermediate):
@@ -80,7 +63,6 @@ def transfer_hexane_final(intermediate):
     robot.aspirate(hexane, aspirate_vol_in_ml)
     robot.uncap(final)
     robot.dispense(final, dispense_vol_in_ml)
-    pegasus.record_transfer(hexane, final, dispense_vol_in_ml)
     robot.cap(final)
     robot.blow_off()
 
@@ -92,9 +74,7 @@ def wt_wt_prep_plan(bot, num_samples):
     robot.create_container('hexane', 0, 0, 500.)
     robot.create_container('tetradecane', 0, 0, 500.)
     robot.prime()
-    triton.map(transfer_tetradecane, samples)
-    triton.map(transfer_sample, samples)
-    triton.map(dilute_sample, samples)
+
 
 if __name__ == '__main__':
     config = {
