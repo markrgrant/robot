@@ -44,7 +44,7 @@ Install the robot package:
 
 Run an example script: 
 ```
-(robotenv) % python examples/wt_wt.py
+(robotenv) % python examples/loop_wt_wt.py
 ```
 
 
