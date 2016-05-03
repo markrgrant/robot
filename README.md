@@ -130,7 +130,7 @@ is enabled and then run:
 
 Nosetests can be used to run the unit tests:
 ```
-% nosetests
+(robotenv) % nosetests
 ```
 
 ## TODO
