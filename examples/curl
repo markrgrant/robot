@@ -1,8 +1,0 @@
-curl -H "Content-Type: application/json" -d '{"name":"wash_tip", "inputs":null, "outputs":null}' http://localhost:5000/task
-
-curl -H "Content-Type: application/json" -d '{"name":"prime", "inputs":null, "outputs":null}' http://localhost:5000/task
-
-curl -H "Content-Type: application/json" -d '{"name":"blow_off", "inputs":null, "outputs":null}' http://localhost:5000/task
-
-curl -H "Content-Type: application/json" -d '{"name":"get_samples", "inputs": {"num_samples": 8}, "outputs":null}' http://localhost:5000/task
-
