@@ -117,10 +117,21 @@ robot.wash()
 robot.blow_off()
 robot.mix(vial)
 ```
+## Additional Examples
+
+More detailed examples are provided in the examples directory. To run
+one of the examples from the root directory, make sure the virtual environment
+is enabled and then run: 
+```
+(robotenv) % python examples/loop_wt_wt.py
+```
 
 ## Running Tests
 
+Nosetests can be used to run the unit tests:
+```
 % nosetests
+```
 
 ## TODO
 
